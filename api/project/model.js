@@ -4,14 +4,16 @@ const db = require("../../data/dbConfig");
 function add(project) {
   const projectForDb = {
     ...project,
-    project_completed: project.project_completed ? 1 : 0,
+    project_completed:
+      project.project_completed === undefined
+        ? false
+        : project.project_completed,
   };
 
   return db("projects")
     .insert(projectForDb, "project_id")
     .then((ids) => {
-      console.log("Inserted IDs:", ids); 
-      return findById(ids[0]);
+      return findById(ids[0].project_id);
     });
 }
 
@@ -22,30 +24,31 @@ function findByName(project_name) {
 }
 
 function findById(id) {
+   
   return db("projects")
     .where({ project_id: id })
     .first()
     .then((project) => {
-      console.log("Project found by ID:", project); 
+      
       if (!project) {
-        return null; 
+        return null;
       }
       return {
         ...project,
-        project_completed: project.project_completed === 1,
+       
       };
     });
 }
-
 
 function getAll() {
   return db("projects").then((projects) =>
     projects.map((project) => ({
       ...project,
-      project_completed: project.project_completed === 1,
+      project_completed: !!project.project_completed,
     }))
   );
 }
+
 
 
 module.exports = {
