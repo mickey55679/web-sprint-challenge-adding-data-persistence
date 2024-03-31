@@ -6,6 +6,7 @@ function addTask(task) {
     ...task,
     task_completed: task.task_completed ? 1 : 0,
   };
+   console.log(taskForDb);
 
   return db("tasks")
     .insert(taskForDb, "task_id")
