@@ -9,6 +9,7 @@ const Projects = require("./model");
 
 router.post('/', async (req, res) => {
    try {
+    console.log(req.body)
     const projectData = req.body;
 
     const newProject = await Projects.add(projectData)
