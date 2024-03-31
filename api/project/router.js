@@ -1,6 +1,7 @@
 // build your `/api/projects` router here
-const router = require('express').Router()
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+const Projects = require("./model");
 
 
 
@@ -9,6 +10,18 @@ console.log('hello')
 res.json({
     message: `Hello from api/projects`
 })
+})
+
+router.post('/', async (req, res) => {
+   try {
+    const projectData = req.body;
+
+    const newProject = await Projects.add(projectData)
+    res.status(201).json(newProject)
+   } catch(error) {
+    res.status(500).json({ message: error.message })
+   }
+
 })
 
 
