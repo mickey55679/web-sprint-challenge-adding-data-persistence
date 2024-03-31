@@ -2,14 +2,13 @@
 const db = require('../../data/dbConfig')
 
 function add(project) {
-
   const projectForDb = {
     ...project,
     project_completed: project.project_completed ? 1 : 0, 
   };
 
   return db("projects")
-    .insert(projectForDb)
+    .insert(projectForDb, "project_id")
     .then((ids) => {
       return findById(ids[0]); 
     });
@@ -26,8 +25,18 @@ function findById(id) {
       };
     });
 }
+function getAll() {
+  return db("projects").then((projects) =>
+    projects.map((project) => ({
+      ...project,
+      project_completed: !!project.project_completed,
+    }))
+  );
+}
+
 
 module.exports = {
   add,
   findById,
+  getAll,
 };

@@ -5,12 +5,7 @@ const Projects = require("./model");
 
 
 
-router.get('/', (req, res) => {
-console.log('hello')
-res.json({
-    message: `Hello from api/projects`
-})
-})
+
 
 router.post('/', async (req, res) => {
    try {
@@ -23,6 +18,14 @@ router.post('/', async (req, res) => {
    }
 
 })
+router.get("/", async (req, res) => {
+  try{
+    const projects = await Projects.getAll();
+    res.status(200).json(projects);
+  } catch (error){
+    res.status(500).json({message: error.message})
+  }
+});
 
 
 
