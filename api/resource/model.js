@@ -12,8 +12,12 @@ function add(resource) {
 function findById(id) {
   return db("resources").where({ resource_id: id }).first();
 }
+function getAll() {
+  return db("resources");
+}
 
 module.exports = {
   add,
   findById,
+  getAll
 };

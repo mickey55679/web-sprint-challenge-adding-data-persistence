@@ -14,12 +14,15 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/', (req, res) => {
-console.log('hello')
-res.json({
-    message: `Hello from api/resources`
+router.get('/', async (req, res) => {
+try {
+    const resources = await Resources.getAll();
+    res.status(200).json(resources)
+} catch(error) {
+    res.status(500).json({ message: error.message})
+}
 })
-})
+
 
 
 
