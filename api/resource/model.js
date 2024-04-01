@@ -6,12 +6,12 @@ function add(resource) {
     .insert(resource)
     .then((ids) => {
       const [id] = ids;
-      console.log("Inserted resource ID:", id); // Debugging: Confirm the ID
+    
       return findById(id);
     })
     .catch((error) => {
-      console.error("Error inserting resource:", error); // Debugging: Catch any error
-      throw error; // Rethrow to handle it in the calling context
+      console.error("Error inserting resource:", error); 
+     
     });
 }
 
