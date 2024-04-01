@@ -18,6 +18,16 @@ router.post("/", validateTask, async (req, res) => {
     }
   }
 });
+router.get("/", async (req, res) => {
+  try {
+    const tasks = await Tasks.getAllTasks();
+    res.json(tasks);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to get tasks", error: error.message });
+  }
+});
 
 
 function validateTask(req, res, next) {

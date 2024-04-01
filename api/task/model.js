@@ -26,6 +26,29 @@ async function addTask(task) {
 }
 
 
+function getAllTasks() {
+  return db("tasks as t")
+    .join("projects as p", "t.project_id", "p.project_id")
+    .select(
+      "t.task_id",
+      "t.task_description",
+      "t.task_notes",
+      db.raw(
+        "CASE WHEN t.task_completed = 0 THEN 0 ELSE 1 END as task_completed"
+      ), 
+      "p.project_name",
+      "p.project_description"
+    )
+    .then((tasks) =>
+      tasks.map((task) => ({
+        ...task,
+        task_completed: task.task_completed === 1, 
+      }))
+    );
+}
+
+
+
 
 function findTaskById(id) {
   return db("tasks")
@@ -45,4 +68,5 @@ function findTaskById(id) {
 module.exports = {
   addTask,
   findTaskById,
+  getAllTasks,
 }
