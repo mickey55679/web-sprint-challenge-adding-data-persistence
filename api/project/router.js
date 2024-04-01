@@ -3,45 +3,36 @@ const express = require("express");
 const router = express.Router();
 const Projects = require("./model");
 
+
 router.post("/", async (req, res) => {
   try {
-   const { project_name, project_description } = req.body;
-   let { project_completed } = req.body;
+    const { project_name, project_description, project_completed } = req.body;
 
-    if (!project_name || !project_description) {
+    if (!project_name) {
       return res
         .status(400)
-        .json({ message: "project_name and project_description are required" });
-    }
-     if (project_completed === undefined) {
-       project_completed = false;
-     }
-
-    const existingProject = await Projects.findByName(project_name);
-    if (existingProject) {
-      return res
-        .status(400)
-        .json({ message: "A project with this name already exists" });
+        .json({ message: "project_name" });
     }
 
     const newProject = await Projects.add({
       project_name,
       project_description,
-      project_completed
+      project_completed,
     });
-    console.log(newProject);
 
-    res.status(201).json({
+    const responseProject = {
       ...newProject,
       project_completed: !!newProject.project_completed,
-    });
+    };
+
+    res.status(201).json(responseProject);
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "Failed to create new project", error: error.message });
+    console.error("Error in POST /api/projects:", error);
+    res.status(500).json({ message: "Failed to add new project" });
   }
 });
+
+
 
 
 
