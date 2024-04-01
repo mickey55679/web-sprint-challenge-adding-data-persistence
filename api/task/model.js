@@ -3,6 +3,14 @@ const db = require("../../data/dbConfig");
 
 async function addTask(task) {
   try {
+    
+    const project = await db("projects")
+      .where("project_id", task.project_id)
+      .first();
+    if (!project) {
+      throw new Error("Invalid project_id");
+    }
+
     const taskForDb = {
       ...task,
       task_completed: task.task_completed ? 1 : 0,
@@ -12,9 +20,11 @@ async function addTask(task) {
     const newTask = await findTaskById(taskId);
     return newTask;
   } catch (error) {
-    console.log("Failed to add new task: " + error.message);
+    console.error("Failed to add new task:", error);
+    throw error; 
   }
 }
+
 
 
 function findTaskById(id) {
