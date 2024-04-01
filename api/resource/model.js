@@ -3,11 +3,18 @@ const db = require("../../data/dbConfig");
 
 function add(resource) {
   return db("resources")
-    .insert(resource, "resource_id")
+    .insert(resource)
     .then((ids) => {
-      return findById(ids[0]);
+      const [id] = ids;
+      console.log("Inserted resource ID:", id); // Debugging: Confirm the ID
+      return findById(id);
+    })
+    .catch((error) => {
+      console.error("Error inserting resource:", error); // Debugging: Catch any error
+      throw error; // Rethrow to handle it in the calling context
     });
 }
+
 
 function findById(id) {
   return db("resources").where({ resource_id: id }).first();

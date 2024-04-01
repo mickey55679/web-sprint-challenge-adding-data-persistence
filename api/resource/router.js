@@ -1,13 +1,18 @@
 // build your `/api/resources` router here
 const router = require('express').Router()
 const Resources = require('./model')
-const express = require('express')
+
 
 
 
 router.post('/', async (req, res) => {
     try{
         const newResource = await Resources.add(req.body);
+         if (!newResource || typeof newResource !== "object") {
+           return res
+             .status(500)
+             .json({ message: "Failed to create the resource." });
+         }
         res.status(201).json(newResource)
     } catch(error) {
         res.status(500).json({message: error.message})
